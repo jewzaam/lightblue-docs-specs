@@ -15,7 +15,20 @@ Multiple LDAP datasources can be used by adding additional blocks, each with a u
  * **maxNumberOfConnections** - _(optional)_ The maximum number of connections that should be maintained in the pool. Defaults to 10.
  * **servers** - A list of _host_ and _port_ numbers to connect to. At least one must be provided. Multiples indicate mirrors that can be equally read from and written to.
 
-Example:
+Hiera for Puppet:
+```
+lightblue::eap::module::ldap_config:
+    - datasourceName: ldap
+      bindabledn: "uid=lightblueuser,ou=serviceaccounts,dc=lightblue,dc=io"
+      password: "my wonderful password"
+      numberOfInitialConnections: 0
+      maxNumberOfConnections: 10
+      servers:
+          - host: ldap.lightblue.io
+            port: 389
+```
+
+Result:
 ```json
 {
     "MyLdapDatasourceName": {
@@ -42,6 +55,14 @@ At this time LDAP is not a suitable backend metadata store and cannot be used in
 ## lightblue-crud.json
 Add the following block to the _controllers_ section in _lightblue-crud.json_. There really isn't anything to configure here, so the equivalent of a copy/paste should work.
 
+Hiera for Puppet:
+```
+lightblue::eap::module::additional_backend_controllers:
+    - backend: ldap
+      controllerFactory: com.redhat.lightblue.config.ldap.LdapControllerFactory
+```
+
+Result:
 ```json
 {
    "controllers" : [
